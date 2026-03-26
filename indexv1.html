@@ -1,0 +1,799 @@
+<<<<<<< HEAD
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dr. Ritesh Kumar — Portfolio</title>
+  <meta name="description" content="Researcher in Indoor Localization, Machine Learning & Intelligent IoT Systems" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+
+  <!-- React & Babel via CDN -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #080808; --bg2: #111; --bg3: #1a1a1a;
+      --gold: #c8a96e; --gold2: #e0c080;
+      --text: #f0ede8; --dim: #888; --mute: #444;
+      --border: rgba(200,169,110,0.18);
+      --sans: 'Inter', sans-serif;
+      --serif: 'Playfair Display', serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-weight: 300; line-height: 1.7; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; }
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+    /* NAV */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      padding: 1.25rem 3rem;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background 0.4s, border-color 0.4s, backdrop-filter 0.4s;
+    }
+    .nav--scrolled { background: rgba(8,8,8,0.94); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
+    .nav-logo { font-size: 1rem; font-weight: 700; letter-spacing: 0.08em; color: var(--gold); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); transition: color 0.25s; position: relative; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a.active { color: var(--gold); }
+    .nav-links a.active::after { content: ''; position: absolute; bottom: -4px; left: 0; right: 0; height: 1px; background: var(--gold); }
+
+    /* HERO */
+    .hero { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; }
+    .hero-text { display: flex; flex-direction: column; justify-content: center; padding: 7rem 4rem 5rem 5rem; }
+    .hero-label { font-size: 0.68rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.7s 0.2s forwards; }
+    .hero-name { font-family: var(--serif); font-size: clamp(2.8rem, 5vw, 5rem); font-weight: 700; line-height: 1.05; margin-bottom: 0.6rem; opacity: 0; animation: fadeUp 0.7s 0.35s forwards; }
+    .hero-name em { font-style: italic; color: var(--gold); }
+    .hero-role { font-family: var(--serif); font-style: italic; font-size: clamp(1rem, 1.8vw, 1.2rem); color: var(--dim); margin-bottom: 2.5rem; opacity: 0; animation: fadeUp 0.7s 0.5s forwards; }
+    .hero-desc { font-size: 0.9rem; color: var(--dim); max-width: 420px; line-height: 1.85; margin-bottom: 3rem; opacity: 0; animation: fadeUp 0.7s 0.65s forwards; }
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 0; opacity: 0; animation: fadeUp 0.7s 0.8s forwards; }
+    .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.75rem; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500; border-radius: 2px; transition: all 0.3s; cursor: pointer; }
+    .btn-primary { background: var(--gold); color: var(--bg); border: 1px solid var(--gold); }
+    .btn-primary:hover { background: var(--gold2); border-color: var(--gold2); }
+    .btn-ghost { background: transparent; color: var(--dim); border: 1px solid var(--border); }
+    .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+    .hero-meta { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 3rem; font-size: 0.78rem; color: var(--mute); opacity: 0; animation: fadeUp 0.7s 0.95s forwards; }
+    .hero-meta-item { display: flex; align-items: center; gap: 0.4rem; }
+    .hero-meta-item svg { color: var(--gold); flex-shrink: 0; }
+
+    /* PASSPORT PHOTO */
+    .hero-photo-panel { display: flex; align-items: center; justify-content: center; background: var(--bg); opacity: 0; animation: fadeIn 1.2s 0.3s forwards; position: relative; }
+    /* subtle vertical gold line on left edge */
+    .hero-photo-panel::before { content: ''; position: absolute; left: 0; top: 20%; bottom: 20%; width: 1px; background: linear-gradient(to bottom, transparent, var(--gold), transparent); }
+    .passport-frame { display: inline-flex; flex-direction: column; align-items: center; gap: 1.4rem; }
+    .passport-card { position: relative; width: 320px; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; background: var(--bg2); box-shadow: 0 32px 100px rgba(0,0,0,0.7), 0 0 0 1px rgba(200,169,110,0.14), 0 0 60px rgba(200,169,110,0.06); }
+    .passport-card::before { content: ''; display: block; height: 3px; background: linear-gradient(to right, var(--gold), var(--gold2), var(--gold)); }
+    .passport-card img { width: 100%; aspect-ratio: 3/4; object-fit: cover; object-position: center top; filter: grayscale(8%) contrast(1.05); transition: filter 0.4s; }
+    .passport-card:hover img { filter: grayscale(0%) contrast(1.08); }
+    .passport-info { padding: 0.85rem 1rem 1rem; border-top: 1px solid var(--border); }
+    .passport-name { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; color: var(--text); margin-bottom: 0.2rem; }
+    .passport-title-text { font-size: 0.62rem; color: var(--dim); letter-spacing: 0.04em; }
+    .photo-badge { font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); background: var(--bg2); border: 1px solid var(--border); border-radius: 2px; padding: 0.45rem 0.9rem; }
+
+    /* SCROLL CUE */
+    .hero-scroll { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 0.5rem; font-size: 0.62rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--mute); z-index: 10; animation: bounce 2.5s infinite; }
+    .hero-scroll-line { width: 1px; height: 36px; background: linear-gradient(to bottom, var(--gold), transparent); }
+
+    /* SECTIONS */
+    .section { padding: 6rem 5rem; max-width: 1300px; margin: 0 auto; }
+    .sh { display: flex; align-items: baseline; gap: 1.25rem; margin-bottom: 3.5rem; }
+    .sh-num { font-size: 0.65rem; color: var(--gold); letter-spacing: 0.22em; font-weight: 500; }
+    .sh-title { font-family: var(--serif); font-size: clamp(1.6rem, 3.5vw, 2.4rem); font-weight: 700; }
+    .sh-line { flex: 1; height: 1px; background: linear-gradient(to right, var(--border), transparent); }
+
+    /* REVEAL */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s cubic-bezier(.16,1,.3,1), transform 0.7s cubic-bezier(.16,1,.3,1); }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ABOUT */
+    .about-body { font-family: var(--serif); font-size: 1.1rem; line-height: 1.95; color: var(--dim); max-width: 760px; margin-bottom: 2.5rem; }
+    .about-body em { color: var(--gold); font-style: italic; }
+    .chips { display: flex; flex-wrap: wrap; gap: 0.65rem; }
+    .chip { display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.45rem 1rem; border: 1px solid var(--border); border-radius: 2px; font-size: 0.75rem; letter-spacing: 0.06em; color: var(--dim); background: var(--bg2); transition: all 0.25s; cursor: default; }
+    .chip:hover { border-color: var(--gold); color: var(--gold); }
+    .chip::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+
+    /* TIMELINE */
+    .timeline { border-left: 1px solid var(--border); padding-left: 2.5rem; }
+    .tl-item { position: relative; padding-bottom: 3rem; }
+    .tl-item::before { content: ''; position: absolute; left: -2.5rem; top: 0.4rem; transform: translateX(-50%); width: 9px; height: 9px; border-radius: 50%; border: 2px solid var(--gold); background: var(--bg); transition: background 0.25s; }
+    .tl-item:hover::before { background: var(--gold); }
+    .tl-period { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.35rem; }
+    .tl-role { font-size: 1rem; font-weight: 600; margin-bottom: 0.2rem; }
+    .tl-org { font-family: var(--serif); font-style: italic; color: var(--dim); font-size: 0.92rem; margin-bottom: 0.7rem; }
+    .tl-points { list-style: none; }
+    .tl-points li { font-size: 0.85rem; color: var(--dim); padding: 0.2rem 0 0.2rem 1.1rem; position: relative; }
+    .tl-points li::before { content: '→'; position: absolute; left: 0; color: var(--gold); font-size: 0.78rem; }
+
+    /* WORKS */
+    .works-section { padding: 6rem 0; overflow: hidden; }
+    .works-header { padding: 0 5rem; max-width: 1300px; margin: 0 auto 3.5rem; }
+    .works-strip { display: flex; overflow-x: auto; gap: 1.25rem; padding: 0.5rem 5rem 2rem; scrollbar-width: none; cursor: grab; }
+    .works-strip::-webkit-scrollbar { display: none; }
+    .works-strip.grabbing { cursor: grabbing; }
+    .work-card { flex: 0 0 360px; background: var(--bg2); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; transition: all 0.35s cubic-bezier(.16,1,.3,1); }
+    .work-card:hover { transform: translateY(-6px); border-color: rgba(200,169,110,0.35); }
+    .work-visual { height: 200px; background: var(--bg3); display: flex; align-items: center; justify-content: center; font-size: 3.5rem; font-weight: 800; letter-spacing: -0.05em; color: rgba(200,169,110,0.07); position: relative; overflow: hidden; }
+    .work-visual-emoji { position: absolute; font-size: 2.4rem; }
+    .work-body { padding: 1.4rem; }
+    .work-num { font-size: 0.62rem; letter-spacing: 0.2em; color: var(--gold); margin-bottom: 0.4rem; }
+    .work-title { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }
+    .work-desc { font-size: 0.8rem; color: var(--dim); line-height: 1.6; margin-bottom: 1rem; }
+    .work-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+    .work-tag { font-size: 0.6rem; letter-spacing: 0.08em; padding: 0.22rem 0.6rem; background: rgba(200,169,110,0.1); border-radius: 2px; color: var(--gold); }
+
+    /* PUBLICATIONS */
+    .pub-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.25rem; }
+    .pub-card { padding: 1.75rem; background: var(--bg2); border: 1px solid var(--border); border-radius: 3px; position: relative; overflow: hidden; transition: all 0.35s cubic-bezier(.16,1,.3,1); cursor: pointer; }
+    .pub-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(to right, var(--gold), transparent); transform: scaleX(0); transform-origin: left; transition: transform 0.35s; }
+    .pub-card:hover { transform: translateY(-3px); border-color: rgba(200,169,110,0.3); }
+    .pub-card:hover::before { transform: scaleX(1); }
+    .pub-type { font-size: 0.6rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.65rem; }
+    .pub-title { font-size: 0.88rem; font-weight: 500; line-height: 1.5; margin-bottom: 0.65rem; }
+    .pub-journal { font-family: var(--serif); font-style: italic; font-size: 0.82rem; color: var(--gold); margin-bottom: 0.4rem; }
+    .pub-authors { font-size: 0.72rem; color: var(--mute); }
+
+    /* SKILLS */
+    .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+    .skill-group { padding: 1.5rem; background: var(--bg2); border: 1px solid var(--border); border-radius: 3px; transition: all 0.25s; }
+    .skill-group:hover { border-color: rgba(200,169,110,0.3); transform: translateY(-2px); }
+    .sg-title { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--border); }
+    .sg-items { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+    .sg-item { font-size: 0.78rem; color: var(--dim); padding: 0.28rem 0.7rem; background: var(--bg3); border-radius: 2px; transition: color 0.25s; }
+    .skill-group:hover .sg-item { color: var(--text); }
+
+    /* EDUCATION */
+    .edu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 1.25rem; }
+    .edu-card { padding: 1.75rem; background: var(--bg2); border: 1px solid var(--border); border-radius: 3px; transition: all 0.25s; position: relative; overflow: hidden; }
+    .edu-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: linear-gradient(to right, var(--gold), transparent); transform: scaleX(0); transform-origin: left; transition: transform 0.35s; }
+    .edu-card:hover { transform: translateY(-2px); }
+    .edu-card:hover::after { transform: scaleX(1); }
+    .edu-year { font-size: 0.62rem; letter-spacing: 0.2em; color: var(--gold); margin-bottom: 0.5rem; }
+    .edu-degree { font-size: 0.97rem; font-weight: 600; margin-bottom: 0.25rem; }
+    .edu-inst { font-family: var(--serif); font-style: italic; color: var(--dim); font-size: 0.9rem; margin-bottom: 0.4rem; }
+    .edu-spec { font-size: 0.78rem; color: var(--mute); }
+    .edu-thesis { margin-top: 0.7rem; font-size: 0.76rem; color: var(--mute); font-style: italic; }
+
+    /* AWARDS */
+    .awards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; }
+    .award-card { padding: 1.5rem; background: var(--bg2); border: 1px solid var(--border); border-radius: 3px; display: flex; gap: 1rem; align-items: flex-start; transition: all 0.25s; }
+    .award-card:hover { border-color: rgba(200,169,110,0.3); transform: translateY(-2px); }
+    .award-icon { font-size: 1.4rem; flex-shrink: 0; width: 2.4rem; height: 2.4rem; display: flex; align-items: center; justify-content: center; background: rgba(200,169,110,0.1); border-radius: 3px; }
+    .award-name { font-size: 0.88rem; font-weight: 600; margin-bottom: 0.2rem; }
+    .award-org { font-size: 0.78rem; color: var(--dim); }
+
+    /* CONTACT */
+    .contact-section { text-align: center; padding: 9rem 4rem; }
+    .contact-big { font-family: var(--serif); font-size: clamp(3rem, 9vw, 9rem); font-weight: 700; line-height: 1; background: linear-gradient(135deg, var(--text) 0%, var(--gold) 55%, var(--mute) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 1.75rem; }
+    .contact-sub { font-family: var(--serif); font-style: italic; font-size: 1.15rem; color: var(--dim); margin-bottom: 3rem; }
+    .contact-links { display: flex; gap: 1.2rem; justify-content: center; flex-wrap: wrap; }
+    .contact-link { display: inline-flex; align-items: center; gap: 0.55rem; padding: 0.8rem 1.8rem; border: 1px solid var(--border); border-radius: 2px; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); background: var(--bg2); transition: all 0.25s; }
+    .contact-link:hover { background: var(--gold); border-color: var(--gold); color: var(--bg); transform: translateY(-2px); }
+
+    /* BACK TO TOP */
+    .back-top { position: fixed; bottom: 2rem; right: 2rem; z-index: 100; width: 42px; height: 42px; border: 1px solid var(--border); border-radius: 3px; background: var(--bg2); color: var(--gold); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; opacity: 0; pointer-events: none; }
+    .back-top.visible { opacity: 1; pointer-events: auto; }
+    .back-top:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); transform: translateY(-2px); }
+
+    /* FOOTER */
+    .footer { padding: 1.75rem 4rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-size: 0.68rem; color: var(--mute); letter-spacing: 0.08em; }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes bounce { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(7px); } }
+
+    /* MOBILE NAV TOGGLE */
+    .nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 0.25rem; }
+    .nav-toggle span { display: block; width: 22px; height: 1.5px; background: var(--dim); margin: 5px 0; transition: all 0.3s; }
+    .nav-mobile { display: none; }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      nav, .nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .nav-toggle { display: block; }
+      .nav-mobile { display: flex; flex-direction: column; position: fixed; top: 56px; left: 0; right: 0; background: rgba(8,8,8,0.97); backdrop-filter: blur(16px); padding: 1.5rem; gap: 1rem; border-bottom: 1px solid var(--border); z-index: 199; }
+      .nav-mobile a { font-size: 0.85rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dim); padding: 0.5rem 0; border-bottom: 1px solid var(--border); }
+      .hero { grid-template-columns: 1fr; }
+      .hero-photo-panel { padding: 3rem 1.5rem 1rem; order: -1; }
+      .passport-card { width: 200px; }
+      .skills-grid { grid-template-columns: 1fr; }
+      .hero-text { padding: 3rem 2rem 4rem; text-align: center; }
+      .hero-desc { margin: 0 auto 2.5rem; }
+      .hero-actions { justify-content: center; }
+      .hero-meta { justify-content: center; }
+      .section { padding: 4rem 1.75rem; }
+      .works-header { padding: 0 1.75rem; }
+      .works-strip { padding: 0 1.75rem 1.5rem; }
+      .footer { flex-direction: column; gap: 0.4rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    /* ─── DATA ──────────────────────────────────────── */
+    const NAV_LINKS = [
+      { href: '#about', label: 'About' },
+      { href: '#experience', label: 'Experience' },
+      { href: '#works', label: 'Works' },
+      { href: '#publications', label: 'Publications' },
+      { href: '#skills', label: 'Skills' },
+      { href: '#contact', label: 'Contact' },
+    ];
+
+    const EXPERIENCE = [
+      {
+        period: 'Aug 2025 — Present', role: 'Research Associate III',
+        org: 'Indian Institute of Technology Roorkee',
+        points: [
+          'IoT and ML-based Landslide Early Warning System — real-time environmental sensing & anomaly detection',
+          'Enhanced displacement sensing with BNO055 IMU and complementary filtering',
+          'Real-time data acquisition and remote transmission via modem and Raspberry Pi',
+        ],
+      },
+      {
+        period: 'Feb 2024 — Aug 2025', role: 'Assistant Professor',
+        org: 'School of Computer Science, UPES Dehradun',
+        points: [
+          'Subject, Class & Activity Coordinator for departmental academic programs',
+          'Session Chair — International Conference on Cyber Security & Digital Forensics (2025)',
+          'Supervised student projects; organized academic engagement initiatives',
+        ],
+      },
+      {
+        period: 'Jan 2019 — Feb 2025', role: 'Senior Research Scholar',
+        org: 'CORD IoT Lab, IIIT Allahabad',
+        points: [
+          'Designed H-LSTMF: hybrid LSTM-based spatial–temporal model — IEEE Sensors Journal (2023)',
+          'Designed H2LWRF-PDR: single AP Wi-Fi + Pedestrian Dead Reckoning — Elsevier IoT (2024)',
+          'Applied Dempster–Shafer theory for probabilistic indoor region prediction — ITU Kaleidoscope (2024)',
+          'Organized short-term training programs on IoT, ML, Blockchain & Wireless Networks',
+        ],
+      },
+    ];
+
+    const WORKS = [
+      { num: '01/06', label: 'LEWS', emoji: '🏔️', title: 'Landslide Early Warning System', desc: 'IoT and ML-based real-time landslide monitoring at IIT Roorkee. Integrates BNO055 IMU, rain gauge sensing, and Raspberry Pi for remote transmission.', tags: ['IoT', 'Raspberry Pi', 'ESP32', 'Anomaly Detection'] },
+      { num: '02/06', label: 'H-LSTMF', emoji: '📡', title: 'H-LSTMF Indoor Localization', desc: 'Hybrid LSTM-based spatial–temporal model for indoor localization. Low-cost, efficient, published in IEEE Sensors Journal 2023.', tags: ['LSTM', 'RSSI', 'PyTorch', 'IEEE Publication'] },
+      { num: '03/06', label: 'H2LWRF', emoji: '🛰️', title: 'H2LWRF-PDR Single AP Positioning', desc: 'Efficient indoor positioning using a single Wi-Fi access point combined with Pedestrian Dead Reckoning. Published in Elsevier IoT 2024.', tags: ['Wi-Fi PDR', 'Single-AP', 'Elsevier IoT', 'Fingerprinting'] },
+      { num: '04/06', label: 'UAV', emoji: '🚁', title: 'Micro-UAV Development & Control', desc: 'Custom micro-UAV platform using ESP32, MPU6050 IMU, PID-based attitude stabilization (roll/pitch/yaw), and Wi-Fi telemetry.', tags: ['ESP32', 'PID Control', 'IMU', 'Wi-Fi'] },
+      { num: '05/06', label: 'UV', emoji: '🤖', title: 'UV Disinfection Robot', desc: 'COVID-19 response robot with optimized UV-C path-planning algorithm improving disinfection efficiency by 27%.', tags: ['Robotics', 'Path Planning', 'HTML5/CSS3', '+27% Efficiency'] },
+      { num: '06/06', label: 'ML/AI', emoji: '🧠', title: 'ML/AI Research Implementations', desc: 'Independent implementations of Transformer, GAN, LSTM. Heart Attack Risk Prediction — Kaggle Silver Medal (2021).', tags: ['Transformers', 'GAN', 'Kaggle 🥈', 'scikit-learn'] },
+    ];
+
+    const PUBLICATIONS = [
+      { type: 'Journal · 2024', title: 'H2LWRF-PDR: An Efficient Indoor Positioning Algorithm Using a Single Wi-Fi Access Point and Pedestrian Dead Reckoning', journal: 'Elsevier Internet of Things, vol. 27, 101271', authors: 'R. Kumar, J. Torres-Sospedra, V. K. Chaurasiya' },
+      { type: 'Journal · 2023', title: 'A Low-Cost and Efficient Spatial–Temporal Model for Indoor Localization (H-LSTMF)', journal: 'IEEE Sensors Journal, vol. 23, no. 6, pp. 6117–6128', authors: 'R. Kumar, S. Singh, V. K. Chaurasiya' },
+      { type: 'Conference · 2024', title: 'Dempster-Shafer Theory-Based Indoor Region Prediction with Single Wi-Fi Access Point for Static Object Localization', journal: 'ITU Kaleidoscope 2024', authors: 'R. Kumar, V. K. Chaurasiya' },
+      { type: 'Workshop · 2023', title: 'Datasets for Indoor Positioning with Single-AP Wi-Fi Fingerprinting', journal: 'WIPHAL 2023 — CEUR Workshop Proceedings', authors: 'R. Kumar, J. Torres-Sospedra, V. K. Chaurasiya' },
+    ];
+
+    const SKILLS = [
+      { title: 'Programming', items: ['Python', 'C / C++', 'Bash', 'Embedded C', 'MATLAB'] },
+      { title: 'ML & Data Analysis', items: ['PyTorch', 'TensorFlow', 'scikit-learn', 'NumPy', 'Pandas', 'RSSI Localization', 'Time-Series'] },
+      { title: 'IoT & Embedded', items: ['ESP32', 'Arduino', 'Raspberry Pi', 'MPU6050', 'BNO055', 'Sensor Fusion'] },
+      { title: 'UAV Systems', items: ['Tricopter Design', 'Quadcopter', 'PID Tuning', 'KK2.1 Controller', 'Attitude Stabilization'] },
+      { title: 'Tools & Platforms', items: ['Git', 'LaTeX', 'Linux', 'Django', 'PyCharm', 'KiCad'] },
+      { title: 'Teaching (UG/PG)', items: ['Machine Learning', 'IoT', 'Embedded Systems', 'Computer Networks', 'ADBMS', 'Python'] },
+    ];
+
+    const EDUCATION = [
+      { year: '2017 — 2025', degree: 'M.Tech–Ph.D. Dual Degree', inst: 'Indian Institute of Information Technology, Allahabad', spec: 'Information Technology · Specialization: Robotics & Machine Learning', thesis: 'Thesis: RSSI-Based Indoor Localization Methods for Static and Dynamic Objects using ML/DL' },
+      { year: '2012 — 2016', degree: 'B.Tech in Electronics & Communication Engineering', inst: 'Dehradun Institute of Technology, Dehradun', spec: 'Focus: Embedded Systems, Signal Processing, UAV Design', thesis: 'Thesis: Design and Control of Multirotor UAV Systems' },
+    ];
+
+    const AWARDS = [
+      { icon: '🏆', name: 'Young Author Award', org: 'Certificate of Appreciation — ITU Kaleidoscope, 2024' },
+      { icon: '🎓', name: 'MHRD GATE Fellowship', org: 'Ministry of Human Resource Development, Government of India, 2017' },
+      { icon: '🧠', name: 'Deep Learning Specialization', org: 'deeplearning.ai / Coursera — Neural Networks, GANs, CNN, Structuring ML Projects' },
+      { icon: '📐', name: 'Mathematics for Machine Learning', org: 'Imperial College London / Coursera' },
+      { icon: '🥈', name: 'Kaggle Silver Medal', org: 'Heart Attack Risk Prediction — Tabular Data Analysis, 2021' },
+      { icon: '💻', name: 'OOP Data Structures in C++', org: 'University of Illinois / Coursera' },
+    ];
+
+    /* ─── HOOKS ─────────────────────────────────────── */
+    function useReveal() {
+      useEffect(() => {
+        const els = document.querySelectorAll('.reveal');
+        const obs = new IntersectionObserver(entries => {
+          entries.forEach((e, i) => {
+            if (e.isIntersecting) {
+              setTimeout(() => e.target.classList.add('visible'), i * 70);
+              obs.unobserve(e.target);
+            }
+          });
+        }, { threshold: 0.08 });
+        els.forEach(el => obs.observe(el));
+        return () => obs.disconnect();
+      }, []);
+    }
+
+    /* ─── COMPONENTS ─────────────────────────────────── */
+    function Nav() {
+      const [scrolled, setScrolled] = useState(false);
+      const [menuOpen, setMenuOpen] = useState(false);
+      const [activeSection, setActiveSection] = useState('');
+
+      useEffect(() => {
+        const onScroll = () => setScrolled(window.scrollY > 60);
+        window.addEventListener('scroll', onScroll);
+        return () => window.removeEventListener('scroll', onScroll);
+      }, []);
+
+      useEffect(() => {
+        const sectionIds = NAV_LINKS.map(l => l.href.replace('#', ''));
+        const obs = new IntersectionObserver(entries => {
+          entries.forEach(e => { if (e.isIntersecting) setActiveSection(e.target.id); });
+        }, { rootMargin: '-40% 0px -55% 0px' });
+        sectionIds.forEach(id => { const el = document.getElementById(id); if (el) obs.observe(el); });
+        return () => obs.disconnect();
+      }, []);
+
+      const close = () => setMenuOpen(false);
+
+      return (
+        <>
+          <nav className={`nav${scrolled ? ' nav--scrolled' : ''}`}>
+            <div className="nav-logo">RK.</div>
+            <ul className="nav-links">
+              {NAV_LINKS.map(l => (
+                <li key={l.href}>
+                  <a href={l.href} className={activeSection === l.href.replace('#','') ? 'active' : ''}>{l.label}</a>
+                </li>
+              ))}
+            </ul>
+            <button className="nav-toggle" onClick={() => setMenuOpen(o => !o)} aria-label="Menu">
+              <span /><span /><span />
+            </button>
+          </nav>
+          {menuOpen && (
+            <div className="nav-mobile">
+              {NAV_LINKS.map(l => (
+                <a key={l.href} href={l.href} onClick={close}>{l.label}</a>
+              ))}
+            </div>
+          )}
+        </>
+      );
+    }
+
+    function Hero() {
+      return (
+        <section className="hero" id="hero" style={{ position: 'relative' }}>
+          <div className="hero-text">
+            <p className="hero-label">// Researcher · IIT Roorkee</p>
+            <h1 className="hero-name">Dr. Ritesh<br /><em>Kumar</em></h1>
+            <p className="hero-role">Indoor Localization · Machine Learning · Intelligent IoT</p>
+            <p className="hero-desc">
+              Building robust indoor positioning systems that work where GPS fails —
+              enabling warehouse automation, asset tracking, emergency response,
+              and autonomous drone navigation through RSSI fingerprinting and deep learning.
+            </p>
+            <div className="hero-actions">
+              <a href="#publications" className="btn btn-primary">View Publications</a>
+              <a href="#contact" className="btn btn-ghost">Get in Touch</a>
+            </div>
+            <div className="hero-meta">
+              <div className="hero-meta-item">
+                <svg width="13" height="13" fill="none" stroke="currentColor" strokeWidth="1.6" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                dr.riteshk94@gmail.com
+              </div>
+              <div className="hero-meta-item">
+                <svg width="13" height="13" fill="none" stroke="currentColor" strokeWidth="1.6" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                Roorkee, Uttarakhand
+              </div>
+            </div>
+          </div>
+
+          <div className="hero-photo-panel">
+            <div className="passport-frame">
+              <div className="passport-card">
+                <img src="photo.jpg" alt="Dr. Ritesh Kumar" />
+                <div className="passport-info">
+                  <div className="passport-name">Dr. Ritesh Kumar</div>
+                  <div className="passport-title-text">Research Associate III</div>
+                </div>
+              </div>
+              <div className="photo-badge">IIT Roorkee · 2025</div>
+            </div>
+          </div>
+
+          <div className="hero-scroll">
+            <div className="hero-scroll-line" />
+            scroll
+          </div>
+        </section>
+      );
+    }
+
+    function SectionHeader({ num, title }) {
+      return (
+        <div className="sh reveal">
+          <span className="sh-num">{num}</span>
+          <h2 className="sh-title">{title}</h2>
+          <div className="sh-line" />
+        </div>
+      );
+    }
+
+    function About() {
+      const interests = [
+        'Indoor Localization & Positioning', 'Aerial Robotics (UAV/UAS)',
+        'Machine Learning & Deep Learning', 'Internet of Things (IoT)',
+        'Embedded Systems', 'RSSI Fingerprinting', 'Sensor Fusion', 'Real-Time Systems',
+      ];
+      return (
+        <section className="section" id="about">
+          <SectionHeader num="01" title="Research Interests" />
+          <p className="about-body reveal">
+            I develop robust, low-cost indoor localization systems integrating RSSI-based
+            fingerprinting with machine learning and deep learning — enabling reliable positioning
+            in GPS-denied environments. Published in <em>Elsevier Internet of Things</em>,{' '}
+            <em>IEEE Sensors Journal</em>, and <em>ITU Kaleidoscope</em>.
+          </p>
+          <div className="chips reveal">
+            {interests.map(i => <div key={i} className="chip">{i}</div>)}
+          </div>
+        </section>
+      );
+    }
+
+    function Experience() {
+      return (
+        <section className="section" id="experience">
+          <SectionHeader num="02" title="Experience" />
+          <div className="timeline">
+            {EXPERIENCE.map((e, idx) => (
+              <div key={idx} className="tl-item reveal">
+                <div className="tl-period">{e.period}</div>
+                <div className="tl-role">{e.role}</div>
+                <div className="tl-org">{e.org}</div>
+                <ul className="tl-points">
+                  {e.points.map((p, i) => <li key={i}>{p}</li>)}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </section>
+      );
+    }
+
+    function Works() {
+      const stripRef = useRef(null);
+      const [grabbing, setGrabbing] = useState(false);
+      const drag = useRef({ down: false, startX: 0, scrollLeft: 0 });
+
+      const onMouseDown = e => {
+        drag.current = { down: true, startX: e.pageX - stripRef.current.offsetLeft, scrollLeft: stripRef.current.scrollLeft };
+        setGrabbing(true);
+      };
+      const onMouseUp = () => { drag.current.down = false; setGrabbing(false); };
+      const onMouseMove = e => {
+        if (!drag.current.down) return;
+        e.preventDefault();
+        stripRef.current.scrollLeft = drag.current.scrollLeft - (e.pageX - stripRef.current.offsetLeft - drag.current.startX) * 1.4;
+      };
+
+      return (
+        <div className="works-section" id="works">
+          <div className="works-header">
+            <SectionHeader num="03" title="Selected Works" />
+          </div>
+          <div
+            ref={stripRef}
+            className={`works-strip${grabbing ? ' grabbing' : ''}`}
+            onMouseDown={onMouseDown}
+            onMouseLeave={onMouseUp}
+            onMouseUp={onMouseUp}
+            onMouseMove={onMouseMove}
+          >
+            {WORKS.map((w, i) => (
+              <div key={i} className="work-card reveal">
+                <div className="work-visual">
+                  {w.label}
+                  <span className="work-visual-emoji">{w.emoji}</span>
+                </div>
+                <div className="work-body">
+                  <div className="work-num">{w.num}</div>
+                  <div className="work-title">{w.title}</div>
+                  <p className="work-desc">{w.desc}</p>
+                  <div className="work-tags">
+                    {w.tags.map(t => <span key={t} className="work-tag">{t}</span>)}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    function Publications() {
+      return (
+        <section className="section" id="publications">
+          <SectionHeader num="04" title="Publications" />
+          <div className="pub-grid">
+            {PUBLICATIONS.map((p, i) => (
+              <div key={i} className="pub-card reveal">
+                <div className="pub-type">{p.type}</div>
+                <div className="pub-title">{p.title}</div>
+                <div className="pub-journal">{p.journal}</div>
+                <div className="pub-authors">{p.authors}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+      );
+    }
+
+    function Skills() {
+      return (
+        <section className="section" id="skills">
+          <SectionHeader num="05" title="Technical Skills" />
+          <div className="skills-grid">
+            {SKILLS.map((g, i) => (
+              <div key={i} className="skill-group reveal">
+                <div className="sg-title">{g.title}</div>
+                <div className="sg-items">
+                  {g.items.map(item => <span key={item} className="sg-item">{item}</span>)}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      );
+    }
+
+    function Education() {
+      return (
+        <section className="section" id="education">
+          <SectionHeader num="06" title="Education" />
+          <div className="edu-grid">
+            {EDUCATION.map((e, i) => (
+              <div key={i} className="edu-card reveal">
+                <div className="edu-year">{e.year}</div>
+                <div className="edu-degree">{e.degree}</div>
+                <div className="edu-inst">{e.inst}</div>
+                <div className="edu-spec">{e.spec}</div>
+                <div className="edu-thesis">{e.thesis}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+      );
+    }
+
+    function Awards() {
+      return (
+        <section className="section" id="awards">
+          <SectionHeader num="07" title="Awards & Certifications" />
+          <div className="awards-grid">
+            {AWARDS.map((a, i) => (
+              <div key={i} className="award-card reveal">
+                <div className="award-icon">{a.icon}</div>
+                <div>
+                  <div className="award-name">{a.name}</div>
+                  <div className="award-org">{a.org}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      );
+    }
+
+    function Contact() {
+      return (
+        <section className="contact-section" id="contact">
+          <div className="contact-big reveal">Let's<br />Connect</div>
+          <p className="contact-sub reveal" style={{ transitionDelay: '0.1s' }}>
+            Open to research collaborations, faculty positions &amp; consulting
+          </p>
+          <div className="contact-links reveal" style={{ transitionDelay: '0.2s' }}>
+            <a href="mailto:dr.riteshk94@gmail.com" className="contact-link">
+              <svg width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1.6" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              Email Me
+            </a>
+            <a href="tel:+918791599206" className="contact-link">
+              <svg width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1.6" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+              +91 8791599206
+            </a>
+            <a href="https://www.linkedin.com/in/doritzku/" target="_blank" rel="noreferrer" className="contact-link">
+              <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+              LinkedIn
+            </a>
+            <a href="https://scholar.google.com/citations?user=SkLgWNgAAAAJ&hl=en" target="_blank" rel="noreferrer" className="contact-link">
+              <svg width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1.6" viewBox="0 0 24 24"><path d="M12 14l9-5-9-5-9 5 9 5z"/><path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
+              Google Scholar
+            </a>
+          </div>
+        </section>
+      );
+    }
+
+    function BackToTop() {
+      const [visible, setVisible] = useState(false);
+      useEffect(() => {
+        const onScroll = () => setVisible(window.scrollY > 400);
+        window.addEventListener('scroll', onScroll);
+        return () => window.removeEventListener('scroll', onScroll);
+      }, []);
+      return (
+        <button
+          className={`back-top${visible ? ' visible' : ''}`}
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          aria-label="Back to top"
+        >
+          <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M18 15l-6-6-6 6"/></svg>
+        </button>
+      );
+    }
+
+    function Footer() {
+      return (
+        <footer className="footer">
+          <span>© 2025 Dr. Ritesh Kumar</span>
+          <span>Research Associate III · IIT Roorkee</span>
+          <span>Built with React</span>
+        </footer>
+      );
+    }
+
+    /* ─── APP ────────────────────────────────────────── */
+    function App() {
+      useReveal();
+      return (
+        <>
+          <Nav />
+          <Hero />
+          <About />
+          <Experience />
+          <Works />
+          <Publications />
+          <Skills />
+          <Education />
+          <Awards />
+          <Contact />
+          <Footer />
+          <BackToTop />
+        </>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
+=======
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Doritzku Biography</title>
+    <style>
+        @font-face {
+            font-family: "JustAnotherHand";
+            src: url(FrederickatheGreat-Regular.ttf) format("truetype");
+        }
+    	.ritz-image {
+            -webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+            -moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+            box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+    	}
+        .Myname {
+            font-family: "JustAnotherHand";
+        }
+        .container {
+            zoom: 1;
+            margin-left: auto;
+            margin-right: auto;
+            vertical-align: middle;
+            text-align: left;
+            width: 100%;
+            max-width: 800px;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <table width="100%" align="center" border="0">
+          <tr>
+            <td width="60%" valign="middle">
+            <h1 class="Myname">Ritesh Kumar</h1>
+            <h2>Research Scholar</h2> 
+            <p> CoRD IOT LAB <br>
+                Dept. of Information Technology <br>
+                Indian Institute of Information Technology Allahabad <br>
+                Prayagraj, Uttar Pradesh, India</p>
+              <!-- Email: ssshi [at] ee [dot] cuhk [dot] edu [dot] hk -->
+              <p><strong>Email:</strong> pro2017003 [at] iiita [dot] ac [dot ] in <br>
+                        doritzku   [at] gmail [dot] com <br>
+                        <strong>Contact Number: </strong>+91-8791599206</p>
+              
+        
+             <!--
+
+              <p>
+                <a href="https://scholar.google.com/citations?user=2s5zra8AAAAJ&hl=en">[Google Scholar]</a>
+                &nbsp; <a href="https://github.com/merazlab">[GitHub]</a> &nbsp;
+                <a href="https://docs.google.com/document/d/11t76AsDbd-6GVsX7dTJS_WXtSPL7GRAUcSRCUju-Zog/edit?usp=sharing">[CV]</a> 
+                <a href="doc/meraz_cv.pdf">[CV]</a>
+                 <a href="https://www.youtube.com/channel/UC0bI_pNSduLZmmGHj3J-T7w">[YouTube]</a> &nbsp;
+                <a href="">[Course Page]</a>
+    
+              </p>-->
+    
+              <p>
+                <a href="https://www.linkedin.com/in/doritzku/">[LinkedIn]</a> &nbsp;
+              </p>
+                      
+            </td>
+            <td width="40%"  align="center">
+                <img src="ritz.jpg" alt="myimage" class="ritz-image"  width=60%>
+            </td>
+          </tr>
+        </table>
+        <h2>Biography</h2>
+        <hr>
+        <p>Currently, I am pursuing a dual degree in MTech-PhD <strong>[2017-2024]</strong>  in the Department of Information Technology from the <strong>Indian Institute of Information Technology, Allahabad, Prayagraj, India,</strong> under the guidance of <strong>Dr.Vijay kumar chaurasia </strong>. Before that, I graduated with a B.Tech <strong>[2016]</strong> in the Department of Electronics and communication engineering from <strong>DIT, University, Dehradun, India</strong>.</p>
+        <p><strong>Research Intersets</strong> are Indoor Localization ,Micro-UAV, Machine Learning, Deep Learning and Internet of Things</p>
+
+        <hr>
+        <h2>Certifications</h2>
+        <hr>
+        <ul>
+            <li>Mathematics for Machine Learning: Multivariate Calculus<br>
+                February 19, 2022
+                <a href="https://coursera.org/share/f4251a2d16752494cca5e47278f0a878">[Certificate] </a>
+
+            </li>
+            <li>Build Basic Generative Adversarial Networks (GANs)<br>
+                November 29, 2021
+                <a href="https://coursera.org/share/bd7abe9beffad08dd3991edf5bf3230d">[Certificate] </a>
+
+            </li>
+            <li>Neural Networks and Deep Learning <br>
+                June 17, 2020
+                <a href="https://coursera.org/share/18f0d7e5c39808ef4dacbb4ea3af00e9">[Certificate] </a>
+
+            </li>
+            <li>Improving Deep Neural Networks: Hyperparameter Tuning, Regularization and Optimization <br>
+                July 12, 2020
+                <a href="https://coursera.org/share/a429b1cd29408905faef1809d879fe36">[Certificate]</a>
+
+            </li>
+            <li>Structuring Machine Learning Projects <br>
+                August 12, 2020
+                <a href="https://coursera.org/share/6a5fdaf417ef233b320ca3003c1b9016">[Certificate]</a>
+            </li>
+            <li>Object-Oriented Data Structures in C++ <br>
+                August 17, 2020
+                <a href="https://coursera.org/share/9e7a0e1149db70b2d9306dc0aeb42b94">[Certificate]</a>
+            </li>
+        </ul>
+        
+        <hr>
+
+    
+    </div>
+    
+</body>
+
+</html>
+>>>>>>> 07aa24e05d50ef9bde723036307ed587fdfe8a74
